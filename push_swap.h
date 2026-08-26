@@ -6,6 +6,18 @@
 # include <unistd.h>
 # include <limits.h>
 
+# define OP_SA  0
+# define OP_SB  1
+# define OP_SS  2
+# define OP_PA  3
+# define OP_PB  4
+# define OP_RA  5
+# define OP_RB  6
+# define OP_RR  7
+# define OP_RRA 8
+# define OP_RRB 9
+# define OP_RRR 10
+
 typedef struct s_node
 {
 	struct s_node	*next;
