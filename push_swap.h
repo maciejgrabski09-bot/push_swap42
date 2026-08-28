@@ -67,7 +67,7 @@ void	push_front(t_node **stack, t_node *node);
 
 int	build_stack(t_ps *ps, t_stack *parsed);
 void	set_indexes(t_ps *ps);
-int	is_sorted(t_node *stack, int size)
+int	is_sorted(t_node *stack, int size);
 
 void	error_exit(void);
 char	*join_args(int argc, char **argv);

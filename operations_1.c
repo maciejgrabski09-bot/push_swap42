@@ -6,9 +6,11 @@
 /*   By: magrabsk <magrabsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 15:59:36 by magrabsk          #+#    #+#             */
-/*   Updated: 2026/08/25 16:35:37 by magrabsk         ###   ########.fr       */
+/*   Updated: 2026/08/28 13:29:32 by magrabsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "push_swap.h"
 
 void	ra(t_ps *ps)
 {
