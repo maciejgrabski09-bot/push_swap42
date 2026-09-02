@@ -53,7 +53,27 @@ typedef struct s_ps
 }	t_ps;
 
 
-int		main(int argc, char **argv);
+int		main(void);
+
+int	find_position(t_node *a, int size, int index);
+int	find_min_position(t_node *a, int size);
+void	rotate_to(t_ps *ps, int pos);
+void	sort_three(t_ps *ps);
+void	sort_small(t_ps *ps);
+void	sort_simple(t_ps *ps);
+
+
+void	ra(t_ps *ps);
+void	rb(t_ps *ps);
+void	rra(t_ps *ps);
+void	rrb(t_ps *ps);
+void	pa(t_ps *ps);
+void	pb(t_ps *ps);
+void	sa(t_ps *ps);
+void	sb(t_ps *ps);
+void	rr(t_ps *ps);
+void	rrr(t_ps *ps);
+void	ss(t_ps *ps);
 
 void	stack_init(t_stack *stack, int capacity);
 void	stack_free(t_stack *stack);

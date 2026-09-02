@@ -13,6 +13,68 @@
 
 #include "push_swap.h"
 
+void    rotate_to(t_ps *ps, int pos)
+{
+        if (pos < ps->size_a / 2)
+        {
+                while (pos > 0)
+                {
+                        ra(ps);
+                        pos--;
+                }
+        }
+        else
+        {
+                while (pos < ps->size_a)
+                {
+                        rra(ps);
+                        pos++;
+                }
+        }
+}
+
+int     find_position(t_node *a, int size, int index)
+{
+        t_node  *node;
+        int     i;
+	
+        node = a;
+        i = 0;
+        while (i < size)
+        {
+                if (node->index > index)
+                        return (i);
+                node = node -> next;
+                i++;
+        }
+        return (0);
+}
+
+
+int     find_min_position(t_node *a, int size)
+{
+        t_node  *node;
+        int     i;
+	int	min;
+	int	pos;
+
+	min = a->index;
+	pos = 0;
+        node = a;
+        i = 0;
+        while (i < size)
+        {
+                if (node->index < min)
+		{
+			node = node->next;
+			pos = i;
+		}
+		node = node->next;
+		i++;
+        }
+	return (pos);
+}
+
 void	sort_three(t_ps *ps)
 {
 	int	first;
@@ -41,22 +103,19 @@ void	sort_three(t_ps *ps)
 	}
 }
 
-void	rotate_to(t_ps *ps, int pos)
+void	sort_small(t_ps *ps)
 {
-	if (pos < ps->size_a / 2)
+	int	pos;
+
+	while (ps->size_a > 3)
+		pb(ps);
+	sort_three(ps);
+	while (ps->size_b > 0)
 	{
-		while (pos > 0)
-		{
-			ra(ps);
-			pos--;
-		}
+		pos = find_position(ps->a, ps->size_a, ps->b->index);
+		rotate_to(ps, pos);
+		pa(ps);
 	}
-	else
-	{
-		while (pos < ps->size_a)
-		{
-			rra(ps);
-			pos++;
-		}
-	}
+	pos = find_min_position(ps->a, ps->size_a);
+	rotate_to(ps, pos);
 }

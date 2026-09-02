@@ -1,19 +1,32 @@
-
-
 #include "push_swap.h"
+#include <stdio.h>
 
-
-// flags: simple/complex/bench -- total 5 options
-// 
-int	main(int argc, char **argv)
+int	main(void)
 {
-	t_flags		flags;
-	t_stack		a;
-	t_stack		b;
+	t_ps	ps;
+	t_ps	*node;
 
-	if (argc < 2)
-		return (0);
-	flags = (t_flags){0, 0, 0, 0, 0};
-	init_and_parse(argc, argv, &flags, &a);
-	stack_init(&b, a.size);
+	ps.a = NULL;
+	ps.b = NULL;
+	ps.size_a = 0;
+	ps.size_b = 0;
+	add_back(&ps.a, 5);
+	add_back(&ps.a, 2);
+	add_back(&ps.a, 8);
+	add_back(&ps.a, 1);
+	ps.size_a = 4;
+	set_indexes(&ps);
+	sort_simple(&ps);
+	node = ps.a;
+	i = 0;
+	while (i < ps.size_a)
+	{
+	printf("%d ", node->value);
+	node = node->next;
+	i++;
+	}
+	printf("\n");
+	free_stack(&ps.a);
+	free_stack(&ps.b);
+	return (0);
 }

@@ -1,78 +1,20 @@
-/**
- * @brief Flattens multi-argument matrices into a single space-delimited string array.
- */
-char	*join_args(int argc, char **argv)
-{
-	char	*joined;
-	int		total_len;
-	int		i;
-	int		pos;
-	int		j;
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_3.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vijain <vijain@student.42warsaw.pl>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/28 20:09:02 by vijain            #+#    #+#             */
+/*   Updated: 2026/08/30 15:36:06 by vijain           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-	total_len = 0;
-	i = 1;
-	while (i < argc)
-		total_len += ft_strlen(argv[i++]) + 1; // Precompute cumulative size requirements
-	joined = malloc(sizeof(char) * (total_len + 1));
-	if (!joined)
-		error_exit();
-	pos = 0;
-	i = 1;
-	while (i < argc)
-	{
-		j = 0;
-		while (argv[i][j])
-			joined[pos++] = argv[i][j++]; // Transfer elements
-		joined[pos++] = ' '; // Pad out segments with space delimiter separator
-		i++;
-	}
-	joined[pos] = '\0'; // Seal with termination character
-	return (joined);
-}
+#include "push_swap.h"
 
-/**
- * @brief Evaluates dynamic text data, tracking signs and INT bounds configurations.
- * 
- * Extends evaluation into a 64-bit long integer to safely detect 32-bit overflows.
- */
-long	parse_number(char *str, int *idx)
-{
-	long	value;
-	int		sign;
-	int		has_digit;
-
-	sign = 1;
-	value = 0;
-	has_digit = 0;
-	// Evaluate sign modifier properties
-	if (str[*idx] == '-' || str[*idx] == '+')
-	{
-		if (str[*idx] == '-')
-			sign = -1;
-		(*idx)++;
-	}
-	// Parse continuous digit blocks
-	while (ft_isdigit(str[*idx]))
-	{
-		value = value * 10 + (str[*idx] - '0');
-		// Catch overflow against strict limits before casting to 32-bit int
-		if ((sign == 1 && value > INT_MAX)
-			|| (sign == -1 && value > (long)INT_MAX + 1))
-			error_exit();
-		has_digit = 1;
-		(*idx)++;
-	}
-	if (!has_digit) // Rejects standard loose '+' or '-' without digits following
-		error_exit();
-	return (value * sign);
-}
-
-/**
- * @brief Checks for values already recorded in the target sequence.
- * 
- * Returns 1 if a target match is already inside Stack A, 0 otherwise.
- */
-int	already_seen(t_stack *a, int value)
+// if dup number, return 1, else 0
+// comparison with all numbers stored in stack a
+static int	dup_num(t_stack *a, int value)
 {
 	int	i;
 
@@ -86,23 +28,51 @@ int	already_seen(t_stack *a, int value)
 	return (0);
 }
 
-/**
- * @brief Allocates an interior integer storage track base array dynamically.
- */
-void	stack_init(t_stack *stack, int capacity)
+// basically ft_atoi
+// exit with error, need to free all_args == str && only_nums
+//		if nbr not in range (INT_MIN, INT_MAX)
+//		more than 1 sign
+static long	parse_number(char *str, int *pos, t_stack *a, char **only_nums)
 {
-	if (capacity <= 0)
+	long	value;
+	int		sign;
+	int		has_digit;
+
+	sign = 1;
+	value = 0;
+	has_digit = 0;
+	if (str[*pos] == '-' || str[*pos] == '+')
 	{
-		stack->data = NULL;
-		stack->size = 0;
-		return ;
+		if (str[*pos] == '-')
+			sign = -1;
+		(*pos)++;
 	}
-	// Secure storage allocation block for numeric values
-	stack->data = malloc(sizeof(int) * capacity);
-	if (!stack->data)
+	while (ft_isdigit(str[*pos]))
 	{
-		ft_putstr_fd("Error\n", 2);
-		exit(1);
+		value = value * 10 + (str[*pos] - '0');
+		if ((sign == 1 && value > INT_MAX)
+			|| (sign == -1 && (-value) < INT_MIN))
+			error_exit(a, NULL, str, only_nums);
+		has_digit = 1;
+		(*pos)++;
 	}
-	stack->size = 0; // Initialize track tracking counter
+	if (!has_digit)
+		error_exit(a, NULL, str, only_nums);
+	return (value * sign);
+}
+
+// Parse Lvl 3: Store all numbers in Stack a
+// s1: parse_number == ft_atoi; Convert str to nbr
+// s2: if non digit char other than space or NULL, exit with error
+// s3: Store num in data (array of integers), index == size (Stack a)
+void	parse_lvl_3(char *all_args, int *pos, t_stack *a, char **only_nums)
+{
+	int	value;
+
+	value = (int)parse_number(all_args, pos, a, only_nums);
+	if (all_args[*pos] != ' ' && all_args[*pos] != '\0')
+		error_exit(a, NULL, all_args, only_nums);
+	if (dup_num(a, value))
+		error_exit(a, NULL, all_args, only_nums);
+	a->data[a->size++] = value;
 }

@@ -33,11 +33,11 @@ void	pa(t_ps *ps)
 	if (ps->size_b == 0)
 		return ;
 	node = pop_front(&ps->b);
-	push_front(&ps->b, node);
+	push_front(&ps->a, node);
 	ps->size_b--;
 	ps->size_a++;
 	ps->counts[OP_PA]++;
-	write(1, "pb\n", 3);
+	write(1, "pa\n", 3);
 }
 
 void	sa(t_ps *ps)
