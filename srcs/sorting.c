@@ -55,25 +55,26 @@ int     find_min_position(t_node *a, int size)
 {
         t_node  *node;
         int     i;
-	int	min;
-	int	pos;
+        int     min;
+        int     pos;
 
-	min = a->index;
-	pos = 0;
-        node = a;
+        node = a; 
+        min = node->index;  
+        pos = 0;
         i = 0;
         while (i < size)
         {
                 if (node->index < min)
-		{
-			node = node->next;
-			pos = i;
-		}
-		node = node->next;
-		i++;
+                {
+                        min = node->index;
+                        pos = i;        
+                }
+                node = node->next;      
+                i++;
         }
-	return (pos);
+        return (pos);
 }
+
 
 void	sort_three(t_ps *ps)
 {
@@ -85,37 +86,36 @@ void	sort_three(t_ps *ps)
 	second = ps->a->next->index;
 	third = ps->a->next->next->index;
 
-	if (first == 0 && second == 2)
+	if (first > second && first > third)
 	{
-		rra(ps);
-		sa(ps);
-	}
-	else if (first == 1 && second == 2)
-		rra(ps);
-	else if (first  == 1 && second == 0)
-		sa(ps);
-	else if (first == 2 && second == 0)
 		ra(ps);
-	else if (first == 2 && second == 1)
+		if (ps->a->index > ps->a->next->index)
+			sa(ps);
+	}
+	else if (second > first && second > third)
+	{
+		rra(ps);
+		if (ps->a->index > ps->a->next->index)
+			sa(ps);
+	}
+	else if (first > second)
 	{
 		sa(ps);
-		rra(ps);
 	}
 }
+
 
 void	sort_small(t_ps *ps)
 {
 	int	pos;
 
 	while (ps->size_a > 3)
+	{
+		pos = find_min_position(ps->a, ps->size_a);
+		rotate_to(ps, pos);
 		pb(ps);
+	}
 	sort_three(ps);
 	while (ps->size_b > 0)
-	{
-		pos = find_position(ps->a, ps->size_a, ps->b->index);
-		rotate_to(ps, pos);
 		pa(ps);
-	}
-	pos = find_min_position(ps->a, ps->size_a);
-	rotate_to(ps, pos);
 }
